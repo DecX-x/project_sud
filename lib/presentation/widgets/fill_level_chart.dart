@@ -10,8 +10,15 @@ class FillLevelChart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     if (history.isEmpty) {
-      return const Center(child: Text('No data available'));
+      return Center(
+        child: Text(
+          'No data available',
+          style: TextStyle(color: isDark ? Colors.grey[400] : Colors.grey[600]),
+        ),
+      );
     }
 
     return LineChart(
@@ -22,7 +29,7 @@ class FillLevelChart extends StatelessWidget {
           horizontalInterval: 25,
           getDrawingHorizontalLine: (value) {
             return FlLine(
-              color: Colors.grey[200],
+              color: isDark ? Colors.grey[800] : Colors.grey[200],
               strokeWidth: 1.5,
               dashArray: [5, 5],
             );
@@ -83,8 +90,14 @@ class FillLevelChart extends StatelessWidget {
         borderData: FlBorderData(
           show: true,
           border: Border(
-            left: BorderSide(color: Colors.grey[300]!, width: 1.5),
-            bottom: BorderSide(color: Colors.grey[300]!, width: 1.5),
+            left: BorderSide(
+              color: isDark ? Colors.grey[700]! : Colors.grey[300]!,
+              width: 1.5,
+            ),
+            bottom: BorderSide(
+              color: isDark ? Colors.grey[700]! : Colors.grey[300]!,
+              width: 1.5,
+            ),
           ),
         ),
         minX: 0,
@@ -132,7 +145,8 @@ class FillLevelChart extends StatelessWidget {
         ],
         lineTouchData: LineTouchData(
           touchTooltipData: LineTouchTooltipData(
-            getTooltipColor: (touchedSpot) => Colors.green,
+            getTooltipColor: (touchedSpot) =>
+                isDark ? Colors.green.shade700 : Colors.green,
             tooltipPadding: const EdgeInsets.symmetric(
               horizontal: 12,
               vertical: 8,
