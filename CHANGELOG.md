@@ -1,5 +1,15 @@
 # Changelog - SmartBin Monitor
 
+## Version 1.1.2 - UI Simplification
+
+### 🎨 UI Changes
+- Removed AppBar with "SmartBin Monitor" title and icon
+- Made "Overview" the main header directly in the body
+- Cleaner, more spacious layout with better focus on content
+- Adjusted top padding for better visual balance
+
+---
+
 ## Version 1.1.1 - Animation Refinement
 
 ### 🔧 Improvements
