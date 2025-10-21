@@ -13,42 +13,64 @@ class AnalyticsScreen extends ConsumerWidget {
     final stats = ref.watch(binStatsProvider);
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Analytics'), centerTitle: true),
+      backgroundColor: Colors.grey[50],
+      appBar: AppBar(
+        title: const Text(
+          'Analytics',
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
+        centerTitle: true,
+        backgroundColor: Colors.white,
+        elevation: 0,
+        automaticallyImplyLeading: false,
+      ),
       body: binsAsync.when(
         data: (bins) => SingleChildScrollView(
-          padding: const EdgeInsets.all(16),
+          padding: const EdgeInsets.all(20),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               // Status Distribution Card
-              Card(
+              Container(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(24),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withValues(alpha: 0.05),
+                      blurRadius: 10,
+                      offset: const Offset(0, 4),
+                    ),
+                  ],
+                ),
                 child: Padding(
-                  padding: const EdgeInsets.all(20),
+                  padding: const EdgeInsets.all(24),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       const Text(
                         'Status Distribution',
                         style: TextStyle(
-                          fontSize: 18,
+                          fontSize: 20,
                           fontWeight: FontWeight.bold,
+                          letterSpacing: -0.5,
                         ),
                       ),
-                      const SizedBox(height: 24),
+                      const SizedBox(height: 32),
                       SizedBox(
-                        height: 200,
+                        height: 220,
                         child: PieChart(
                           PieChartData(
-                            sectionsSpace: 2,
-                            centerSpaceRadius: 60,
+                            sectionsSpace: 4,
+                            centerSpaceRadius: 70,
                             sections: [
                               PieChartSectionData(
                                 value: stats.normal.toDouble(),
                                 title: '${stats.normal}',
                                 color: Colors.green,
-                                radius: 50,
+                                radius: 60,
                                 titleStyle: const TextStyle(
-                                  fontSize: 16,
+                                  fontSize: 18,
                                   fontWeight: FontWeight.bold,
                                   color: Colors.white,
                                 ),
@@ -57,9 +79,9 @@ class AnalyticsScreen extends ConsumerWidget {
                                 value: stats.warning.toDouble(),
                                 title: '${stats.warning}',
                                 color: Colors.orange,
-                                radius: 50,
+                                radius: 60,
                                 titleStyle: const TextStyle(
-                                  fontSize: 16,
+                                  fontSize: 18,
                                   fontWeight: FontWeight.bold,
                                   color: Colors.white,
                                 ),
@@ -68,9 +90,9 @@ class AnalyticsScreen extends ConsumerWidget {
                                 value: stats.full.toDouble(),
                                 title: '${stats.full}',
                                 color: Colors.red,
-                                radius: 50,
+                                radius: 60,
                                 titleStyle: const TextStyle(
-                                  fontSize: 16,
+                                  fontSize: 18,
                                   fontWeight: FontWeight.bold,
                                   color: Colors.white,
                                 ),
@@ -79,7 +101,7 @@ class AnalyticsScreen extends ConsumerWidget {
                           ),
                         ),
                       ),
-                      const SizedBox(height: 24),
+                      const SizedBox(height: 32),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
@@ -92,30 +114,58 @@ class AnalyticsScreen extends ConsumerWidget {
                   ),
                 ),
               ),
-              const SizedBox(height: 16),
+              const SizedBox(height: 20),
 
               // Fill Level Comparison
-              Card(
+              Container(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(24),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withValues(alpha: 0.05),
+                      blurRadius: 10,
+                      offset: const Offset(0, 4),
+                    ),
+                  ],
+                ),
                 child: Padding(
-                  padding: const EdgeInsets.all(20),
+                  padding: const EdgeInsets.all(24),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       const Text(
                         'Fill Level Comparison',
                         style: TextStyle(
-                          fontSize: 18,
+                          fontSize: 20,
                           fontWeight: FontWeight.bold,
+                          letterSpacing: -0.5,
                         ),
                       ),
                       const SizedBox(height: 24),
                       SizedBox(
-                        height: 250,
+                        height: 280,
                         child: BarChart(
                           BarChartData(
                             alignment: BarChartAlignment.spaceAround,
                             maxY: 100,
-                            barTouchData: BarTouchData(enabled: true),
+                            barTouchData: BarTouchData(
+                              enabled: true,
+                              touchTooltipData: BarTouchTooltipData(
+                                getTooltipColor: (group) => Colors.black87,
+                                tooltipPadding: const EdgeInsets.all(8),
+                                getTooltipItem:
+                                    (group, groupIndex, rod, rodIndex) {
+                                      return BarTooltipItem(
+                                        '${rod.toY.toStringAsFixed(0)}%',
+                                        const TextStyle(
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      );
+                                    },
+                              ),
+                            ),
                             titlesData: FlTitlesData(
                               show: true,
                               bottomTitles: AxisTitles(
@@ -129,7 +179,11 @@ class AnalyticsScreen extends ConsumerWidget {
                                           bins[value.toInt()].name.split(
                                             ' ',
                                           )[1],
-                                          style: const TextStyle(fontSize: 12),
+                                          style: TextStyle(
+                                            fontSize: 13,
+                                            fontWeight: FontWeight.w600,
+                                            color: Colors.grey[700],
+                                          ),
                                         ),
                                       );
                                     }
@@ -140,11 +194,18 @@ class AnalyticsScreen extends ConsumerWidget {
                               leftTitles: AxisTitles(
                                 sideTitles: SideTitles(
                                   showTitles: true,
-                                  reservedSize: 40,
+                                  reservedSize: 42,
                                   getTitlesWidget: (value, meta) {
-                                    return Text(
-                                      '${value.toInt()}%',
-                                      style: const TextStyle(fontSize: 10),
+                                    return Padding(
+                                      padding: const EdgeInsets.only(right: 8),
+                                      child: Text(
+                                        '${value.toInt()}%',
+                                        style: TextStyle(
+                                          fontSize: 11,
+                                          fontWeight: FontWeight.w500,
+                                          color: Colors.grey[600],
+                                        ),
+                                      ),
                                     );
                                   },
                                 ),
@@ -160,18 +221,45 @@ class AnalyticsScreen extends ConsumerWidget {
                               show: true,
                               drawVerticalLine: false,
                               horizontalInterval: 25,
+                              getDrawingHorizontalLine: (value) {
+                                return FlLine(
+                                  color: Colors.grey[200],
+                                  strokeWidth: 1.5,
+                                  dashArray: [5, 5],
+                                );
+                              },
                             ),
-                            borderData: FlBorderData(show: false),
+                            borderData: FlBorderData(
+                              show: true,
+                              border: Border(
+                                left: BorderSide(
+                                  color: Colors.grey[300]!,
+                                  width: 1.5,
+                                ),
+                                bottom: BorderSide(
+                                  color: Colors.grey[300]!,
+                                  width: 1.5,
+                                ),
+                              ),
+                            ),
                             barGroups: bins.asMap().entries.map((entry) {
+                              final color = _getBarColor(entry.value.status);
                               return BarChartGroupData(
                                 x: entry.key,
                                 barRods: [
                                   BarChartRodData(
                                     toY: entry.value.fillLevel,
-                                    color: _getBarColor(entry.value.status),
-                                    width: 20,
+                                    gradient: LinearGradient(
+                                      begin: Alignment.bottomCenter,
+                                      end: Alignment.topCenter,
+                                      colors: [
+                                        color,
+                                        color.withValues(alpha: 0.7),
+                                      ],
+                                    ),
+                                    width: 28,
                                     borderRadius: const BorderRadius.vertical(
-                                      top: Radius.circular(4),
+                                      top: Radius.circular(8),
                                     ),
                                   ),
                                 ],
@@ -184,7 +272,7 @@ class AnalyticsScreen extends ConsumerWidget {
                   ),
                 ),
               ),
-              const SizedBox(height: 16),
+              const SizedBox(height: 20),
 
               // Quick Stats
               Row(
@@ -193,7 +281,7 @@ class AnalyticsScreen extends ConsumerWidget {
                     child: _buildStatCard(
                       'Average',
                       '${stats.averageFillLevel.toStringAsFixed(1)}%',
-                      Icons.analytics,
+                      Icons.analytics_outlined,
                       Colors.blue,
                     ),
                   ),
@@ -202,7 +290,7 @@ class AnalyticsScreen extends ConsumerWidget {
                     child: _buildStatCard(
                       'Highest',
                       '${bins.isEmpty ? 0 : bins.map((b) => b.fillLevel).reduce((a, b) => a > b ? a : b).toStringAsFixed(0)}%',
-                      Icons.arrow_upward,
+                      Icons.arrow_upward_rounded,
                       Colors.red,
                     ),
                   ),
@@ -218,26 +306,34 @@ class AnalyticsScreen extends ConsumerWidget {
   }
 
   Widget _buildLegend(String label, Color color, int value) {
-    return Row(
+    return Column(
       children: [
-        Container(
-          width: 16,
-          height: 16,
-          decoration: BoxDecoration(color: color, shape: BoxShape.circle),
-        ),
-        const SizedBox(width: 8),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+        Row(
+          mainAxisSize: MainAxisSize.min,
           children: [
+            Container(
+              width: 16,
+              height: 16,
+              decoration: BoxDecoration(
+                color: color,
+                borderRadius: BorderRadius.circular(4),
+              ),
+            ),
+            const SizedBox(width: 8),
             Text(
               label,
-              style: TextStyle(fontSize: 12, color: Colors.grey.shade600),
-            ),
-            Text(
-              '$value bins',
-              style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+              style: TextStyle(
+                fontSize: 13,
+                fontWeight: FontWeight.w600,
+                color: Colors.grey[700],
+              ),
             ),
           ],
+        ),
+        const SizedBox(height: 4),
+        Text(
+          '$value bins',
+          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
         ),
       ],
     );
@@ -249,24 +345,42 @@ class AnalyticsScreen extends ConsumerWidget {
     IconData icon,
     Color color,
   ) {
-    return Card(
+    return Container(
+      decoration: BoxDecoration(
+        color: color.withValues(alpha: 0.1),
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: color.withValues(alpha: 0.3), width: 1.5),
+      ),
       child: Padding(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.all(20),
         child: Column(
           children: [
-            Icon(icon, color: color, size: 32),
-            const SizedBox(height: 8),
+            Container(
+              padding: const EdgeInsets.all(10),
+              decoration: BoxDecoration(
+                color: color.withValues(alpha: 0.2),
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Icon(icon, color: color, size: 28),
+            ),
+            const SizedBox(height: 12),
             Text(
               value,
               style: TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
                 color: color,
+                letterSpacing: -0.5,
               ),
             ),
+            const SizedBox(height: 4),
             Text(
               label,
-              style: TextStyle(fontSize: 12, color: Colors.grey.shade600),
+              style: TextStyle(
+                fontSize: 13,
+                color: Colors.grey[700],
+                fontWeight: FontWeight.w500,
+              ),
             ),
           ],
         ),

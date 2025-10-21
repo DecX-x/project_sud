@@ -21,19 +21,30 @@ class FillLevelChart extends StatelessWidget {
           drawVerticalLine: false,
           horizontalInterval: 25,
           getDrawingHorizontalLine: (value) {
-            return FlLine(color: Colors.grey[300], strokeWidth: 1);
+            return FlLine(
+              color: Colors.grey[200],
+              strokeWidth: 1.5,
+              dashArray: [5, 5],
+            );
           },
         ),
         titlesData: FlTitlesData(
           leftTitles: AxisTitles(
             sideTitles: SideTitles(
               showTitles: true,
-              reservedSize: 40,
+              reservedSize: 42,
               interval: 25,
               getTitlesWidget: (value, meta) {
-                return Text(
-                  '${value.toInt()}%',
-                  style: TextStyle(color: Colors.grey[600], fontSize: 10),
+                return Padding(
+                  padding: const EdgeInsets.only(right: 8),
+                  child: Text(
+                    '${value.toInt()}%',
+                    style: TextStyle(
+                      color: Colors.grey[600],
+                      fontSize: 11,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
                 );
               },
             ),
@@ -47,7 +58,7 @@ class FillLevelChart extends StatelessWidget {
           bottomTitles: AxisTitles(
             sideTitles: SideTitles(
               showTitles: true,
-              reservedSize: 30,
+              reservedSize: 32,
               interval: 6,
               getTitlesWidget: (value, meta) {
                 if (value.toInt() >= 0 && value.toInt() < history.length) {
@@ -56,7 +67,11 @@ class FillLevelChart extends StatelessWidget {
                     padding: const EdgeInsets.only(top: 8),
                     child: Text(
                       DateFormat('HH:mm').format(entry.timestamp),
-                      style: TextStyle(color: Colors.grey[600], fontSize: 10),
+                      style: TextStyle(
+                        color: Colors.grey[600],
+                        fontSize: 11,
+                        fontWeight: FontWeight.w500,
+                      ),
                     ),
                   );
                 }
@@ -68,8 +83,8 @@ class FillLevelChart extends StatelessWidget {
         borderData: FlBorderData(
           show: true,
           border: Border(
-            left: BorderSide(color: Colors.grey[300]!),
-            bottom: BorderSide(color: Colors.grey[300]!),
+            left: BorderSide(color: Colors.grey[300]!, width: 1.5),
+            bottom: BorderSide(color: Colors.grey[300]!, width: 1.5),
           ),
         ),
         minX: 0,
@@ -82,18 +97,47 @@ class FillLevelChart extends StatelessWidget {
               return FlSpot(entry.key.toDouble(), entry.value.fillLevel);
             }).toList(),
             isCurved: true,
+            curveSmoothness: 0.35,
             color: Colors.green,
-            barWidth: 3,
+            barWidth: 3.5,
             isStrokeCapRound: true,
-            dotData: const FlDotData(show: false),
+            dotData: FlDotData(
+              show: true,
+              getDotPainter: (spot, percent, barData, index) {
+                return FlDotCirclePainter(
+                  radius: 3,
+                  color: Colors.white,
+                  strokeWidth: 2.5,
+                  strokeColor: Colors.green,
+                );
+              },
+            ),
             belowBarData: BarAreaData(
               show: true,
-              color: Colors.green.withValues(alpha: 0.1),
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [
+                  Colors.green.withValues(alpha: 0.3),
+                  Colors.green.withValues(alpha: 0.05),
+                ],
+              ),
+            ),
+            shadow: Shadow(
+              color: Colors.green.withValues(alpha: 0.3),
+              blurRadius: 8,
+              offset: const Offset(0, 4),
             ),
           ),
         ],
         lineTouchData: LineTouchData(
           touchTooltipData: LineTouchTooltipData(
+            getTooltipColor: (touchedSpot) => Colors.green,
+            tooltipPadding: const EdgeInsets.symmetric(
+              horizontal: 12,
+              vertical: 8,
+            ),
+            tooltipBorder: const BorderSide(color: Colors.green, width: 1),
             getTooltipItems: (touchedSpots) {
               return touchedSpots.map((spot) {
                 final entry = history[spot.x.toInt()];
@@ -102,11 +146,35 @@ class FillLevelChart extends StatelessWidget {
                   const TextStyle(
                     color: Colors.white,
                     fontWeight: FontWeight.bold,
+                    fontSize: 12,
                   ),
                 );
               }).toList();
             },
           ),
+          handleBuiltInTouches: true,
+          getTouchedSpotIndicator: (barData, spotIndexes) {
+            return spotIndexes.map((index) {
+              return TouchedSpotIndicatorData(
+                FlLine(
+                  color: Colors.green.withValues(alpha: 0.5),
+                  strokeWidth: 2,
+                  dashArray: [5, 5],
+                ),
+                FlDotData(
+                  show: true,
+                  getDotPainter: (spot, percent, barData, index) {
+                    return FlDotCirclePainter(
+                      radius: 6,
+                      color: Colors.white,
+                      strokeWidth: 3,
+                      strokeColor: Colors.green,
+                    );
+                  },
+                ),
+              );
+            }).toList();
+          },
         ),
       ),
     );
