@@ -17,15 +17,7 @@ class HomeScreen extends ConsumerWidget {
     ref.watch(binMonitorProvider);
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('SmartBin Monitor'),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.settings),
-            onPressed: () => context.push('/settings'),
-          ),
-        ],
-      ),
+      appBar: AppBar(title: const Text('SmartBin Monitor'), centerTitle: true),
       body: RefreshIndicator(
         onRefresh: () async {
           ref.invalidate(binsProvider);

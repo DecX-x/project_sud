@@ -10,7 +10,11 @@ class SettingsScreen extends ConsumerWidget {
     final settings = ref.watch(settingsProvider);
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Settings')),
+      appBar: AppBar(
+        title: const Text('Settings'),
+        centerTitle: true,
+        automaticallyImplyLeading: false,
+      ),
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: [
