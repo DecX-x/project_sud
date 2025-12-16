@@ -15,6 +15,20 @@ final binByIdProvider = FutureProvider.family<BinModel?, String>((
   return await BinRepository.getBinById(id);
 });
 
+// Stream provider for real-time single bin updates (every 3 seconds)
+final binByIdStreamProvider = StreamProvider.family<BinModel?, String>((
+  ref,
+  id,
+) async* {
+  // Initial load
+  yield await BinRepository.getBinById(id);
+
+  // Refresh every 3 seconds
+  await for (var _ in Stream.periodic(const Duration(seconds: 3))) {
+    yield await BinRepository.getBinById(id);
+  }
+});
+
 final binStatsProvider = Provider<BinStats>((ref) {
   final binsAsync = ref.watch(binsProvider);
 

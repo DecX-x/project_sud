@@ -19,8 +19,14 @@ void main() async {
   // Initialize notifications
   await NotificationService.initialize();
 
-  // Seed dummy data
-  await BinRepository.seedDummyData();
+  // Try to fetch from API, fallback to dummy data if fails
+  try {
+    await BinRepository.fetchBinsFromApi();
+    print('✅ Successfully loaded bins from API');
+  } catch (e) {
+    print('⚠️ API not available, using dummy data: $e');
+    await BinRepository.seedDummyData();
+  }
 
   runApp(const ProviderScope(child: MyApp()));
 }

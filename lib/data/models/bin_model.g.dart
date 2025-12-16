@@ -24,13 +24,15 @@ class BinModelAdapter extends TypeAdapter<BinModel> {
       status: fields[4] as BinStatus,
       lastUpdated: fields[5] as DateTime,
       history: (fields[6] as List).cast<HistoryEntry>(),
+      heightCm: fields[7] as double?,
+      distanceCm: fields[8] as double?,
     );
   }
 
   @override
   void write(BinaryWriter writer, BinModel obj) {
     writer
-      ..writeByte(7)
+      ..writeByte(9)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
@@ -44,7 +46,11 @@ class BinModelAdapter extends TypeAdapter<BinModel> {
       ..writeByte(5)
       ..write(obj.lastUpdated)
       ..writeByte(6)
-      ..write(obj.history);
+      ..write(obj.history)
+      ..writeByte(7)
+      ..write(obj.heightCm)
+      ..writeByte(8)
+      ..write(obj.distanceCm);
   }
 
   @override

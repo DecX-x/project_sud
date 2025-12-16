@@ -1,5 +1,40 @@
 # Changelog - SmartBin Monitor
 
+## Version 1.2.0 - API Integration
+
+### 🔌 API Integration
+- Integrated with SmartBin REST API
+- Real-time data fetching from server
+- Auto-refresh every 30 seconds
+- Connection status indicator (Live/Offline)
+- Fallback to cached data when offline
+- HTTP client for API communication
+
+### 🛠️ Technical Changes
+- Added `ApiService` for API calls
+- Added `ApiConstants` for configuration
+- Updated `BinModel` with API response mapping
+- Updated `BinRepository` with API integration
+- Added `ConnectionProvider` for status monitoring
+- Added internet permissions for Android
+- Caching system with Hive for offline support
+
+### 📡 API Endpoints
+- GET `/bins_extended/` - Fetch all bins with fill data
+- GET `/bins/{id}` - Get single bin details
+- GET `/measurements/` - Get measurements history
+- GET `/measurements/{id}/latest` - Get latest measurement
+- GET `/health` - Health check endpoint
+
+### 🎯 Features
+- Real-time bin monitoring from API
+- Automatic fallback to dummy data if API unavailable
+- Connection status badge (green for online, orange for offline)
+- Seamless offline/online transitions
+- Data caching for better performance
+
+---
+
 ## Version 1.1.2 - UI Simplification
 
 ### 🎨 UI Changes
