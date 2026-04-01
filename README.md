@@ -41,7 +41,7 @@ flutter doctor
 1. Masuk ke folder project:
 
 ```bash
-cd /home/runner/work/project_sud/project_sud
+cd <project-directory>
 ```
 
 2. Install dependency:
@@ -120,15 +120,15 @@ lib/
 
 Konfigurasi endpoint dan API key ada di:
 
-`/home/runner/work/project_sud/project_sud/lib/core/constants/api_constants.dart`
+`lib/core/constants/api_constants.dart`
 
 Dokumentasi API lebih detail:
 
-- `/home/runner/work/project_sud/project_sud/API_INTEGRATION.md`
+- `API_INTEGRATION.md`
 
 ## Catatan
 
 - Saat startup, app akan mencoba fetch data dari API.
 - Jika API gagal, app fallback ke cache/dummy data agar tetap bisa digunakan.
 - Riwayat perubahan ada di:
-  - `/home/runner/work/project_sud/project_sud/CHANGELOG.md`
+  - `CHANGELOG.md`
